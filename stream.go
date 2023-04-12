@@ -8,13 +8,6 @@ import (
 	"time"
 )
 
-// Package mjpeg implements a simple MJPEG streamer.
-//
-// Stream objects implement the http.Handler interface, allowing to use them with the net/http package like so:
-//	stream = mjpeg.NewStream()
-//	http.Handle("/camera", stream)
-// Then push new JPEG frames to the connected clients using stream.UpdateJPEG().
-
 // Stream represents a single video feed.
 type Stream struct {
 	m    map[chan []byte]bool
