@@ -4,6 +4,7 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"os"
 )
 
 var (
@@ -16,6 +17,11 @@ func upload(_ http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+	port := "8080"
+	if len(os.Args) == 2 {
+		port = os.Args[1]
+	}
+
 	http.HandleFunc("/upload", upload)
 	http.HandleFunc("/download", stream.ServeHTTP)
 
@@ -24,5 +30,6 @@ func main() {
 		_, _ = w.Write([]byte("<img width='100%' height='100%' src='/download'>"))
 	})
 
-	log.Fatal(http.ListenAndServe("0.0.0.0:8080", nil))
+	log.Println("server listening on", port)
+	log.Fatalln(http.ListenAndServe("0.0.0.0:"+port, nil))
 }

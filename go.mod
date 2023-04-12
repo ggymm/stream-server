@@ -1,3 +1,3 @@
-module image-server
+module stream-server
 
 go 1.19
