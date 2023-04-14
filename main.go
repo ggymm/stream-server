@@ -1,6 +1,8 @@
 package main
 
 import (
+	"bytes"
+	"image/jpeg"
 	"io"
 	"log"
 	"net/http"
@@ -12,8 +14,20 @@ var (
 )
 
 func upload(_ http.ResponseWriter, r *http.Request) {
-	bytes, _ := io.ReadAll(r.Body)
-	stream.UpdateJPEG(bytes)
+	origin, _ := io.ReadAll(r.Body)
+
+	inputImage, err := jpeg.Decode(bytes.NewBuffer(origin))
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	var compress bytes.Buffer
+	err = jpeg.Encode(&compress, inputImage, &jpeg.Options{Quality: 50})
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	stream.UpdateJPEG(compress.Bytes())
 }
 
 func main() {
