@@ -62,8 +62,6 @@ func (s *Stream) UpdateJPEG(jpeg []byte) {
 
 	s.lock.Lock()
 	for c := range s.m {
-		// Select to skip streams which are sleeping to drop frames.
-		// This might need more thought.
 		select {
 		case c <- s.frame:
 		default:
